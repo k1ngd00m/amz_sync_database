@@ -2,9 +2,11 @@ package repositorioinfra
 
 import (
 	"context"
+	"errors"
 
 	"github.com/k1ngd00m/amz_sync_database/dominio/entidad"
 	"github.com/k1ngd00m/amz_sync_database/dominio/puerto/repositorio"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -20,7 +22,7 @@ func NewMongoRepositorioProducto(cliente *mongo.Client) repositorio.RepositorioP
 	return repo
 }
 
-func (m *MongoRepositorioProducto) RegistrarProducto(producto *entidad.Producto) error {
+func (m *MongoRepositorioProducto) Registrar(producto *entidad.Producto) error {
 
 	documento := &DocumentoProducto{
 		ID:          producto.ID,
@@ -45,4 +47,35 @@ func (m *MongoRepositorioProducto) RegistrarProducto(producto *entidad.Producto)
 
 	return nil
 
+}
+
+func (m *MongoRepositorioProducto) Actualizar(producto *entidad.Producto) error {
+
+	ctx := context.TODO()
+	coleccion := m.cliente.Database("catalogo").Collection("productos")
+
+	filter := bson.D{{Key: "_id", Value: producto.ID}}
+
+	update := bson.D{{Key: "$set", Value: bson.D{
+		{Key: "nombre", Value: producto.Nombre},
+		{Key: "descripcion", Value: producto.Descripcion},
+		{Key: "stock", Value: producto.Stock},
+		{Key: "estado", Value: producto.Estado},
+		{Key: "categoria", Value: bson.D{
+			{Key: "_id", Value: producto.Categoria.ID},
+			{Key: "nombre", Value: producto.Categoria.Nombre},
+		}},
+	}}}
+
+	result, err := coleccion.UpdateOne(ctx, filter, update)
+
+	if err != nil {
+		return err
+	}
+
+	if result.ModifiedCount == 0 {
+		return errors.New("No se actualizo ningun registro")
+	}
+
+	return nil
 }

@@ -22,7 +22,7 @@ func NewManejadorRegistrarProducto(servicioRegistrarProducto *servicio.ServicioR
 	return *manejadorRegistrarProducto
 }
 
-func (m *ManejadorRegistrarProducto) Ejecutar(dtoProducto dto.DtoRegistrarProducto) error {
+func (m *ManejadorRegistrarProducto) Ejecutar(dtoProducto *dto.DtoProducto) error {
 
 	categoria, err := m.servicioBuscarCategoria.Ejecutar(dtoProducto.IdCategoria)
 

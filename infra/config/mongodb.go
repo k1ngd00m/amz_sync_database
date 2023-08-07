@@ -12,7 +12,7 @@ import (
 )
 
 func GetReadDBConexion() *mongo.Client {
-	uri := os.Getenv("DBCATALOGO_URI_READ")
+	uri := os.Getenv("DBCATALOGO_URI")
 
 	ctx := context.TODO()
 

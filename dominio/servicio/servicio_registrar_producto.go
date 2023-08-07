@@ -18,5 +18,5 @@ func NewServicioRegistrarProducto(repositorioProducto *repositorio.RepositorioPr
 }
 
 func (m *ServicioRegistrarProducto) Ejecutar(producto *entidad.Producto) error {
-	return m.repositorioProducto.RegistrarProducto(producto)
+	return m.repositorioProducto.Registrar(producto)
 }

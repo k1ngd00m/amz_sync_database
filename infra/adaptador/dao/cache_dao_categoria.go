@@ -33,7 +33,7 @@ func NewCacheDaoCategoria() dao.DaoCategoria {
 }
 
 func (m *CacheDaoCategoria) ObtenerPorId(id string) (*dto.DtoCategoria, error) {
-	if x, found := m.almacenDatos.Get("foo"); found {
+	if x, found := m.almacenDatos.Get(id); found {
 		categoria := x.(*dto.DtoCategoria)
 		return categoria, nil
 	}

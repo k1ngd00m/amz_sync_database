@@ -36,6 +36,7 @@ func (m *RabbitMQConsumer) On(queue string, f func(deliveries <-chan amqp.Delive
 	if chErr != nil {
 		log.Fatalf("%s: %s", "Error al consumir", chErr)
 	}
+	
 
 	go f(message)
 
